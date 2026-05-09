@@ -4,3 +4,9 @@ spring:
 
   port:
     8080
+
+  datasource:
+    url: jdbc:postgresql://ep-broad-cherry-aqc8fcbe-pooler.c-8.us-east-1.aws.neon.tech/neondb?user=neondb_owner&password=npg_pOCEMtTZsk41&sslmode=require&channelBinding=require
+  jpa:
+    properties:
+      ddl-auto: create-drop
