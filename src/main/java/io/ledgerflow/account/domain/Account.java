@@ -10,21 +10,28 @@ import org.springframework.data.annotation.LastModifiedDate;
 import java.time.Instant;
 import java.util.UUID;
 
-@Setter
 @Getter
 @NoArgsConstructor
 @Entity
+@Table(
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"accountId"}),
+                @UniqueConstraint(columnNames = {"userId"})
+        }
+)
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true, updatable = false)
+    @Column(nullable = false, updatable = false)
     private UUID accountId;
 
-    private Long balanceMinor;
+    @Setter
+    @Column(nullable = false)
+    private Long balanceMinor = 0L;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, updatable = false)
     private UUID userId;
 
     @Version
@@ -35,4 +42,9 @@ public class Account {
 
     @LastModifiedDate
     private Instant updatedAt;
+
+    public Account(UUID userId) {
+        this.accountId = UUID.randomUUID();
+        this.userId = userId;
+    }
 }
