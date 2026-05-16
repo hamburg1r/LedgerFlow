@@ -1,7 +1,6 @@
 package io.ledgerflow.user.application;
 
 import io.ledgerflow.user.api.CreateUserRequest;
-import io.ledgerflow.user.api.UserMapper;
 import io.ledgerflow.user.api.UserResponse;
 import io.ledgerflow.user.domain.User;
 import io.ledgerflow.user.error.UserNotFoundException;

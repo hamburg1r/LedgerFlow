@@ -1,5 +1,6 @@
-package io.ledgerflow.account.api;
+package io.ledgerflow.account.application;
 
+import io.ledgerflow.account.api.AccountResponse;
 import io.ledgerflow.account.domain.Account;
 
 public class AccountMapper {

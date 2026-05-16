@@ -1,4 +1,4 @@
-package io.ledgerflow.user.api;
+package io.ledgerflow.user.application;
 
 import io.ledgerflow.user.domain.User;
 import org.springframework.stereotype.Component;

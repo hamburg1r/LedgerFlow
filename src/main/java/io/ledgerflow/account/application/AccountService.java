@@ -1,6 +1,5 @@
 package io.ledgerflow.account.application;
 
-import io.ledgerflow.account.api.AccountMapper;
 import io.ledgerflow.account.api.AccountResponse;
 import io.ledgerflow.account.api.CreateAccountRequest;
 import io.ledgerflow.account.domain.Account;
