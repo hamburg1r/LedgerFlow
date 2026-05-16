@@ -1,5 +1,7 @@
 package io.ledgerflow.user.application;
 
+import io.ledgerflow.user.api.CreateUserRequest;
+import io.ledgerflow.user.api.UserResponse;
 import io.ledgerflow.user.domain.User;
 import org.springframework.stereotype.Component;
 
@@ -16,19 +18,9 @@ public class UserMapper {
         );
     }
 
-    public User createRequestToUser(CreateUserRequest createRequest) {
-        User user = new User();
-        user.setName(createRequest.name());
-        user.setEmail(createRequest.email());
-        return user;
-    }
-
-    // Might not be needed
-    public User createRequestToResponse(UUID id, CreateUserRequest createRequest) {
-        User user = new User();
-        user.setId(id);
-        user.setName(createRequest.name());
-        user.setEmail(createRequest.email());
-        return user;
+    public User createRequestToUser(CreateUserRequest createRequest, UUID id) {
+        return new User((id!= null) ? id : UUID.randomUUID(),
+                createRequest.name(),
+                createRequest.email());
     }
 }
