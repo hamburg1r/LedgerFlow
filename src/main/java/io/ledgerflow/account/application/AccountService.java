@@ -23,7 +23,7 @@ public class AccountService {
 
     public AccountResponse createAccount(CreateAccountRequest createAccountRequest) throws AccountAlreadyExistsException {
         try {
-            Account account = new Account(createAccountRequest.userId());
+            Account account = new Account(UUID.randomUUID(), createAccountRequest.userId());
             accountRepository.save(account);
 
             logger.info("Account created for: {}", createAccountRequest.userId());
@@ -38,8 +38,15 @@ public class AccountService {
     }
 
     public AccountResponse getAccountById(UUID id) {
-        Account account = accountRepository.findByAccountId(id)
-                .orElseThrow(() -> new AccountNotFoundException("Account with id: " + id + " not found"));
-        return accountMapper.accountToResponse(account);
+        return accountRepository.findByAccountId(id)
+//                .map("Fetch from Ledger")
+                .map((account) -> {
+                    logger.debug("Account fetched for: {}", id);
+                    return accountMapper.accountToResponse(account);
+                })
+                .orElseThrow(() -> {
+                    logger.debug("Account not found for: {}", id);
+                    return new AccountNotFoundException("Account with id: " + id + " not found");
+                });
     }
 }

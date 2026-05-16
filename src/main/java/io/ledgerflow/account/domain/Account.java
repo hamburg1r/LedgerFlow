@@ -3,7 +3,6 @@ package io.ledgerflow.account.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -27,9 +26,8 @@ public class Account {
     @Column(nullable = false, updatable = false)
     private UUID accountId;
 
-    @Setter
     @Column(nullable = false)
-    private Long balanceMinor = 0L;
+    private long balanceMinor = 0L;
 
     @Column(nullable = false, updatable = false)
     private UUID userId;
@@ -43,8 +41,12 @@ public class Account {
     @LastModifiedDate
     private Instant updatedAt;
 
-    public Account(UUID userId) {
-        this.accountId = UUID.randomUUID();
+    public Account(UUID accountId, UUID userId) {
+        this.accountId = accountId;
         this.userId = userId;
+    }
+
+    public void applyBalanceProjection(Long amount) {
+        this.balanceMinor = amount;
     }
 }
