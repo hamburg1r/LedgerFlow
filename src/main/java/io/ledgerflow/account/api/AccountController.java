@@ -3,7 +3,6 @@ package io.ledgerflow.account.api;
 import io.ledgerflow.account.application.AccountService;
 import io.ledgerflow.account.error.AccountAlreadyExistsException;
 import io.ledgerflow.account.error.AccountNotFoundException;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -22,15 +21,14 @@ public class AccountController {
     private static final Logger logger =LoggerFactory.getLogger(AccountController.class);
 
     @PostMapping()
-    public ResponseEntity<AccountResponse> createAccount(@Valid @RequestBody CreateAccountRequest createAccountRequest, HttpServletRequest request) {
+    public ResponseEntity<AccountResponse> createAccount(@Valid @RequestBody CreateAccountRequest createAccountRequest) {
         try {
-            logger.debug("Create request for: {} from: {}", createAccountRequest.userId(), request.getRemoteAddr());
+            logger.debug("Create request for: {}", createAccountRequest.userId());
             AccountResponse response = accountService.createAccount(createAccountRequest);
 
-            logger.info("Account created for: {}", createAccountRequest.userId());
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         } catch (AccountAlreadyExistsException e) {
-            logger.info("Problem creating the account: {}", e.getMessage());
+            logger.warn("Problem creating the account: {}", e.getMessage());
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
@@ -41,10 +39,10 @@ public class AccountController {
             logger.debug("Get request for: {}", accountId);
             AccountResponse response = accountService.getAccountById(accountId);
 
-            logger.info("Account fetched for: {}", accountId);
+            logger.debug("Account fetched for: {}", accountId);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (AccountNotFoundException e) {
-            logger.info("Problem fetching the account: {}", e.getMessage());
+            logger.debug("Problem fetching the account: {}", e.getMessage());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
