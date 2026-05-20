@@ -2,6 +2,7 @@ package io.ledgerflow.user.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -9,6 +10,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Getter
+@NoArgsConstructor
 @Entity
 @Table(
         uniqueConstraints = {
@@ -33,8 +35,6 @@ public class User {
 
     @LastModifiedDate
     private Instant updatedAt;
-
-    protected User() {}
 
     public User(UUID id, String name, String email) {
         this.id = id;
