@@ -17,8 +17,8 @@ ACCOUNT {
 
 LEDGER {
     bigint id PK "because no need to expese it"
-    long amountMinor "Can have negative number"
-    int type "Asset/Liability/Equity"
+    long amountMinor "Always > 0"
+    string type "Debit/Credit"
     uuid accountId FK "Not using user because who knows if
     in future user might be able to have multiple accounts"
     uuid transactionId FK
