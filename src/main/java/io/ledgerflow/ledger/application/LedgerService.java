@@ -17,8 +17,8 @@ public class LedgerService {
     private final LedgerRepository ledgerRepository;
 
     @Transactional
-    public void postJournal(JournalRequest entry) {
-        JournalMapper.journalEntryRequestToJournalEntry(entry)
+    public void postJournal(JournalRequest journalRequest) {
+        JournalMapper.journalEntryRequestToJournalEntry(journalRequest)
                 .entries()
                 .forEach(ledgerRepository::save);
     }
@@ -27,8 +27,7 @@ public class LedgerService {
     public BalanceResponse getBalanceByAccountId(UUID accountId) {
         return new BalanceResponse(
                 accountId,
-                ledgerRepository.getBalanceByAccountId(accountId)
-        );
+                ledgerRepository.getBalanceByAccountId(accountId));
     }
 
     public Optional<JournalResponse> getEntryByTransactionId(UUID id) {
