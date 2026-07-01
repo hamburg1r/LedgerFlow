@@ -18,7 +18,7 @@ ACCOUNT {
 LEDGER {
     bigint id PK "because no need to expese it"
     long amountMinor "Always > 0"
-    string type "Debit/Credit"
+    string direction "Debit/Credit"
     uuid accountId FK "Not using user because who knows if
     in future user might be able to have multiple accounts"
     uuid transactionId FK
@@ -26,19 +26,26 @@ LEDGER {
 
 PaymentTransaction {
     uuid id PK "use uuid 7"
-    string state "Created? -> Processing -> Succes/Failed
-    | Refunded"
-    uuid initiatedBy FK
+    string state "Created -> Processing -> Success/Failed"
+    uuid accountId FK
+    
+}
+
+PaymentTransactionReversal {
+    uuid originalTransactionId PK, FK
+    uuid reversalTransactionId UK, FK
 }
 
 %% For now its 1:1 but later it'll be 1:M
-USER||..||ACCOUNT: owns
+USER||..|{ACCOUNT: owns
 LEDGER}o..||ACCOUNT: "to/from"
 %% TODO: For now ledger will always be associated with
 %% PaymentTransaction but after reconciliation is
 %% implemented it'll be |o instead
 PaymentTransaction||..o{LEDGER: "Associated with"
 ACCOUNT||..o{PaymentTransaction: Initiates
+PaymentTransaction||..||PaymentTransactionReversal: "Original Transaction ID"
+PaymentTransaction||..||PaymentTransactionReversal: "Reversal Transaction ID"
 ```
 
 <!-- vim: set colorcolumn=60 : -->
