@@ -21,7 +21,8 @@ public class AccountService {
     private final AccountMapper accountMapper;
     private static final Logger logger = LoggerFactory.getLogger(AccountService.class);
 
-    public AccountResponse createAccount(CreateAccountRequest createAccountRequest) throws AccountAlreadyExistsException {
+    public AccountResponse createAccount(CreateAccountRequest createAccountRequest)
+            throws AccountAlreadyExistsException {
         try {
             Account account = new Account(UUID.randomUUID(), createAccountRequest.userId());
             accountRepository.save(account);
@@ -32,14 +33,13 @@ public class AccountService {
             logger.debug("Duplicate account creation request for: {}", createAccountRequest.userId());
             return accountMapper.accountToResponse(
                     accountRepository.findByUserId(createAccountRequest.userId())
-                            .orElseThrow(() -> new AccountNotFoundException("Cannot fetch account by user id:"+createAccountRequest.userId()))
-            );
+                            .orElseThrow(() -> new AccountNotFoundException(
+                                    "Cannot fetch account by user id:" + createAccountRequest.userId())));
         }
     }
 
     public AccountResponse getAccountById(UUID id) {
         return accountRepository.findByAccountId(id)
-//                .map("Fetch from Ledger")
                 .map((account) -> {
                     logger.debug("Account fetched for: {}", id);
                     return accountMapper.accountToResponse(account);
@@ -48,5 +48,15 @@ public class AccountService {
                     logger.debug("Account not found for: {}", id);
                     return new AccountNotFoundException("Account with id: " + id + " not found");
                 });
+    }
+
+    public boolean canDebit(UUID accountId, UUID debitAccountId) {
+        // TODO: when auth is implemented, then this method should check if the transaction initiator is authorized to debit the account.
+        return accountId.equals(debitAccountId);
+    }
+
+    public boolean canReverse(UUID reversalInitiator, UUID transactionInitiator) {
+        // TODO: when auth is implemented, then this method should check if the reversal initiator is authorized to reverse the transaction.
+        return reversalInitiator.equals(transactionInitiator);
     }
 }
